@@ -77,6 +77,12 @@
 			<groupId>eigenbase</groupId>
 			<artifactId>eigenbase-xom</artifactId>
 			<version>1.3.0.11999</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>xercesImpl</artifactId>
+					<groupId>xerces</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
   		<dependency>
 			<groupId>org.olap4j</groupId>
