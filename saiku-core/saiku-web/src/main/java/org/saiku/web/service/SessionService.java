@@ -99,49 +99,24 @@ public class SessionService implements ISessionService {
 		HttpSession session = ((HttpServletRequest)req).getSession(true);
 		session.getId();
 		sessionRepo.setSession(session);
-		try {
-			sl = l.getLicense();
-		} catch (Exception e) {
-			log.debug("Could not process license", e);
-			throw new LicenseException("Error fetching license. Get a free license from http://licensing.meteorite.bi. You can upload it at /upload.html");
+
+		if (authenticationManager != null) {
+			authenticate(req, username, password);
 		}
+		if (SecurityContextHolder.getContext() != null
+			&& SecurityContextHolder.getContext().getAuthentication() != null) {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-		if (sl != null) {
-
-			try {
-				l.validateLicense();
-			} catch (RepositoryException | IOException | ClassNotFoundException e) {
-				log.debug("Repository Exception, couldn't get license", e);
-				throw new LicenseException("Error fetching license. Please check your logs.");
-			}
-
-			try {
-				if (l.getLicense() instanceof SaikuLicense2) {
-
-                    if (authenticationManager != null) {
-                        authenticate(req, username, password);
-                    }
-                    if (SecurityContextHolder.getContext() != null
-                        && SecurityContextHolder.getContext().getAuthentication() != null) {
-                        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-                        if (authorisationPredicate.isAuthorised(auth)) {
-                            Object p = auth.getPrincipal();
-                            createSession(auth, username, password);
-                            return sessionHolder.get(p);
-                        } else {
-                            log.info(username + " failed authorisation. Rejecting login");
-                            throw new RuntimeException("Authorisation failed for: " + username);
-                        }
-                    }
-                    return new HashMap<>();
-                }
-			} catch (IOException | ClassNotFoundException | RepositoryException e) {
-				log.debug("Repository Exception, couldn't get license", e);
-				throw new LicenseException("Error fetching license. Please check your logs.");
+			if (authorisationPredicate.isAuthorised(auth)) {
+				Object p = auth.getPrincipal();
+				createSession(auth, username, password);
+				return sessionHolder.get(p);
+			} else {
+				log.info(username + " failed authorisation. Rejecting login");
+				throw new RuntimeException("Authorisation failed for: " + username);
 			}
 		}
-		return null;
+		return new HashMap<>();
 	}
 
 	private void createSession(Authentication auth, String username, String password) {
