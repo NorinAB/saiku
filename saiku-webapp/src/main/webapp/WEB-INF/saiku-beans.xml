@@ -215,7 +215,6 @@
     </bean>
     <bean id="licenseBean" class="org.saiku.web.rest.resources.License">
         <property name="databaseManager" ref="h2database"/>
-        <property name="licenseUtils" ref="licenseUtils"/>
         <property name="userService" ref="userServiceBean"/>
     </bean>
 
