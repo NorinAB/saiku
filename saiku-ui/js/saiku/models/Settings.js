@@ -19,6 +19,6 @@ var SettingsOverride = Backbone.Model.extend({
 });
 
 var SettingsOverrideCollection = Backbone.Collection.extend({
-    model: SettingsOverride,
-    url: 'info/ui-settings'
+    // model: SettingsOverride,
+    // url: 'info/ui-settings'
 });
