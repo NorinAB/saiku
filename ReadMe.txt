@@ -47,3 +47,5 @@ echo | mutt -a "./export.xls" -s "Scheduled Report Delivery" -- email@email.com
 curl "http://10.4.134.157/login" -H "Content-Type: application/x-www-form-urlencoded" --data "language=en&username=Administrator@gromov.ru&password=Qwerty1" -c ./cookies.txt
 curl "http://10.4.134.157/n_dashboard_space/68319361" -b cookies.txt
 -----------end script---------
+4. Удалил каталог saiku-legal, который содержал в себе файл с каким-то договором. По идее, проект распространяется по Apache License Version 2.0, так что никаких проблем быть не должно.
+Перевод описания лицензии (http://www.dataved.ru/2011/03/apache-license-2.html)
