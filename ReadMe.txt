@@ -30,3 +30,20 @@ saiku-server - используется при сбоке всего прило�
 Последующая история.
 1. Удалил каталог .circleci (ссылка на проект https://circleci.com/). Предназначен проект для автоматической сбоки и публикации с GitHub, BitBucket
 2. Удалил каталог saiku-bi-platform-plugin-p7.1. Считаю его лишним т.к. нигде не используется - только билдится. Видимо используется для подключения проекта к Pentaho.
+3. Удалён каталог exporter. В нём был интересный скрипт по установлению сессии и получении данных:
+https://curl.haxx.se/docs/manpage.html
+Интересно, что утилите curl можно добавить залоговок: -H 'Content-Type: application/x-www-form-urlencoded'
+Запостить данные --data 'language=en&username=admin&password=admin'
+Записывает куки, после исполнения -c ./cookies.txt
+Отправляет куки -b cookies.txt
+-----------start script---------
+#!/bin/bash
+curl 'http://localhost:8080/saiku/rest/saiku/session' -H 'Content-Type: application/x-www-form-urlencoded' --data 'language=en&username=admin&password=admin' -c ./cookies.txt
+curl 'http://localhost:8080/saiku/rest/saiku/admin/export/saiku/xls?file=/homes/home:admin/report1.saiku' -b cookies.txt  > export.xls
+echo | mutt -a "./export.xls" -s "Scheduled Report Delivery" -- email@email.com
+-----------end script---------
+Попробовал подключиться аналогичный образом к другому проекту - всё получилось. Использовал curl внутри git
+-----------start script---------
+curl "http://10.4.134.157/login" -H "Content-Type: application/x-www-form-urlencoded" --data "language=en&username=Administrator@gromov.ru&password=Qwerty1" -c ./cookies.txt
+curl "http://10.4.134.157/n_dashboard_space/68319361" -b cookies.txt
+-----------end script---------
