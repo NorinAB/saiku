@@ -20,7 +20,7 @@ var Settings = {};
 $.ajax({
     async: false, // do not change to true
     type: 'GET',
-    url: 'js/saiku/Settings.yaml',
+    url: '/js/saiku/Settings.yaml',
     success: function(props) {
         // JavaScript YAML parser
         // link: https://github.com/nodeca/js-yaml
